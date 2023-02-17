@@ -64,7 +64,7 @@ body {
   justify-content: space-between;
 }
 
-.content__top-title {
+.content__top-weekday {
   font-weight: 600;
   font-size: 40px;
   line-height: 60px;
@@ -105,7 +105,7 @@ body {
   line-height: 61px;
 }
 
-.content__bottom-text{
+.content__bottom-weather{
   font-weight: 700;
   font-size: 30px;
   line-height: 37px;
@@ -114,7 +114,7 @@ body {
 .info{
   display: flex;
   flex-direction: column;
-  width: 500px;
+  max-width: 500px;
   height: 600px;
   /* background: linear-gradient(0deg, #000000, #000000), #000000; */
   /* opacity: 0.8; */
@@ -199,7 +199,7 @@ body {
   border-radius: 30px;
 }
 
-.info__box-text {
+.info__box-weekday {
   font-weight: 400;
   margin: 15px 0;
 }
