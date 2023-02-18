@@ -163,6 +163,7 @@ body {
 
 .form__button:hover {
   background-color: #c1c1c1;
+  transform: scale(1.05);
 }
 
 .info__list{
@@ -198,6 +199,12 @@ body {
   padding: 20px 25px;
   background-color: #272E37;
   border-radius: 30px;
+  transition: all .4s;
+}
+
+.info__box-item:hover {
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .info__box-weekday {

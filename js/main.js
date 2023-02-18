@@ -23,8 +23,6 @@ const infoTemp = document.querySelectorAll('.info__box-temp')
 // const url =
 // 'https://api.weatherapi.com/v1/current.json?key=e9a5d3b74bf84418b11193028231901&q=London'
 
-// const imgSrc = `https://api.openweathermap.org/img/w/${value}.png`
-
 // `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=77f461e07d8696ecbe2d0479346b20c9`
 
 const getWeatherData = async (city) => {
@@ -106,6 +104,12 @@ function images(img) {
 const app = async (city = 'Kiev') => {
   const weather = await getWeatherData(city)
 
+  if (weather.message) {
+    // Провірка на ошибку
+    console.log(weather.message)
+    return
+  }
+
   const cityName = cityCountry(weather.city)
   const temp_Weather = tempWeather(weather.list)
   const img = images(weather.list)
@@ -113,7 +117,7 @@ const app = async (city = 'Kiev') => {
   const dataWeather = data(weather.list)
 
   contentWeekday.textContent = day[0][0]
-  contentDate.textContent = `${day[0][2]} ${(day[0][1])} ${day[0][3]}`
+  contentDate.textContent = `${day[0][2]} ${day[0][1]} ${day[0][3]}`
   contentCity.textContent = cityName[0]
 
   contentImages.src = `https://api.openweathermap.org/img/w/${img[0]}.png`
@@ -137,7 +141,7 @@ app()
 form.addEventListener('submit', (e) => {
   e.preventDefault()
   if (!formInput.value) return
-  
+
   app(formInput.value)
   
   formInput.value = ''
