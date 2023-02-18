@@ -61,7 +61,7 @@ function date(date) {
   return result
 }
 
-function city(city) {
+function cityCountry(city) {
   const result = []
   for (let i = 0; i < 3; i++) {
     result.push(city.name + ', ' + city.country)
@@ -76,11 +76,11 @@ function data(value) {
     // result.push(value[i].clouds.all)
     // result.push(value[i].main.humidity)
     // result.push(value[i].wind.speed)
-    console.log(value[i].weather[0].main)
+    // console.log(value[i].weather[0].main)
     result.push([
-      value[i].clouds.all,
-      value[i].main.humidity,
-      value[i].wind.speed,
+      Math.floor(value[i].clouds.all),
+      Math.floor(value[i].main.humidity),
+      Math.floor(value[i].wind.speed),
     ])
   }
   return result
@@ -103,9 +103,43 @@ function images(img) {
 }
 
 // Default values
-const app = async () => {
-  const weather = await getWeatherData('Polonne')
-  // console.log(tempWeather(weather.list))
+const app = async (city = 'Kiev') => {
+  const weather = await getWeatherData(city)
+
+  const cityName = cityCountry(weather.city)
+  const temp_Weather = tempWeather(weather.list)
+  const img = images(weather.list)
+  const day = date(weather.list)
+  const dataWeather = data(weather.list)
+
+  contentWeekday.textContent = day[0][0]
+  contentDate.textContent = `${day[0][2]} ${(day[0][1])} ${day[0][3]}`
+  contentCity.textContent = cityName[0]
+
+  contentImages.src = `https://api.openweathermap.org/img/w/${img[0]}.png`
+  contentTemp.textContent = temp_Weather[0][0] + '°C'
+  contentWeather.textContent = temp_Weather[0][1]
+
+  precip.textContent = dataWeather[0][0] + '%'
+  humidity.textContent = dataWeather[0][1] + '%'
+  wind.textContent = dataWeather[0][2] + ' m/sec'
+
+  for (let i = 0; i < infoTemp.length; i++) {
+    infoTemp[i].textContent = temp_Weather[i][0] + ' °C'
+    infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
+    infoImages[i].style.width = '65px'
+    infoWeekday[i].textContent = day[i][0]
+  }
 }
 
 app()
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
+  if (!formInput.value) return
+  
+  app(formInput.value)
+  
+  formInput.value = ''
+  formInput.focus()
+})

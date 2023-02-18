@@ -188,6 +188,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
+  gap: 10px;
 }
 
 .info__box-item {
