@@ -24,8 +24,6 @@ const infoTemp = document.querySelectorAll('.info__box-temp')
 // const url =
 // 'https://api.weatherapi.com/v1/current.json?key=e9a5d3b74bf84418b11193028231901&q=London'
 
-// `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=77f461e07d8696ecbe2d0479346b20c9`
-
 const getWeatherData = async (city) => {
   try {
     const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=77f461e07d8696ecbe2d0479346b20c9`
@@ -60,45 +58,27 @@ function date(date) {
   return result
 }
 
-function cityCountry(city) {
-  const result = []
-  for (let i = 0; i < 3; i++) {
-    result.push(city.name + ', ' + city.country)
-  }
-  return result
-}
-//-----
+function weatherData(values) {
+  const data = []
+  const tepm = []
+  const weatherDescrp = []
+  const img = []
 
-function data(value) {
-  const result = []
-  for (let i = 0; i <= value.length - 24; i += 8) {
-    result.push([
-      Math.floor(value[i].clouds.all),
-      Math.floor(value[i].main.humidity),
-      Math.floor(value[i].wind.speed),
-    ])
-  }
-  return result
-}
-
-function tempWeather(values) {
-  const result = []
   for (let i = 0; i <= values.length - 24; i += 8) {
-    result.push([Math.round(values[i].main.temp), values[i].weather[0].main])
+    data.push([
+      Math.floor(values[i].clouds.all),
+      Math.floor(values[i].main.humidity),
+      Math.floor(values[i].wind.speed),
+    ])
+    tepm.push(Math.round(values[i].main.temp))
+    weatherDescrp.push(values[i].weather[0].main)
+    img.push(values[i].weather[0].icon)
   }
-  return result
-}
-
-function images(img) {
-  const result = []
-  for (let i = 0; i <= img.length - 24; i += 8) {
-    result.push(img[i].weather[0].icon)
-  }
-  return result
+  return [data, tepm, weatherDescrp, img]
 }
 
 // Default values
-const app = async ({city = 'Kiev', index = 0} = {}) => {
+const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   const weather = await getWeatherData(city)
 
   // Провірка на ошибку
@@ -106,30 +86,32 @@ const app = async ({city = 'Kiev', index = 0} = {}) => {
     console.log(weather.message)
     formInput.setAttribute('placeholder', `${weather.message}`)
     return
+    return
   } else {
     formInput.setAttribute('placeholder', 'Search..')
   }
 
-  const cityName = cityCountry(weather.city)
-  const temp_Weather = tempWeather(weather.list)
-  const img = images(weather.list)
-  const day = date(weather.list)
-  const dataWeather = data(weather.list)
+  const cityName = weather.city.name + ', ' + weather.city.country
+  const day = date(weather.list) 
+  const dataWeather = weatherData(weather.list)[0]
+  const temp = weatherData(weather.list)[1]
+  const weatherDescrp = weatherData(weather.list)[2]
+  const img = weatherData(weather.list)[3]
 
   contentWeekday.textContent = day[index][0]
   contentDate.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
-  contentCity.textContent = cityName[index]
+  contentCity.textContent = cityName
 
   contentImages.src = `https://api.openweathermap.org/img/w/${img[index]}.png`
-  contentTemp.textContent = temp_Weather[index][0] + '°C'
-  contentWeather.textContent = temp_Weather[index][1]
+  contentTemp.textContent = temp[index] + '°C'
+  contentWeather.textContent = weatherDescrp[index]
 
   precip.textContent = dataWeather[index][0] + '%'
   humidity.textContent = dataWeather[index][1] + '%'
   wind.textContent = dataWeather[index][2] + ' m/sec'
 
   for (let i = 0; i < infoTemp.length; i++) {
-    infoTemp[i].textContent = temp_Weather[i][0] + ' °C'
+    infoTemp[i].textContent = temp[i] + ' °C'
     infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
     infoImages[i].style.width = '65px'
     infoWeekday[i].textContent = day[i][0]
@@ -142,16 +124,16 @@ form.addEventListener('submit', (e) => {
   e.preventDefault()
   if (!formInput.value) return
 
-  app({city: formInput.value})
+  app({ city: formInput.value })
 
   formInput.value = ''
   formInput.focus()
 })
 
 infoItem.forEach((item, index) => {
-  item.addEventListener('click' , (e) => {
+  item.addEventListener('click', (e) => {
     const elem = contentCity.textContent
     const indexElem = elem.indexOf(',')
-    app({city: elem.slice(0, indexElem),index: index})
+    app({ city: elem.slice(0, indexElem), index: index })
   })
 })
