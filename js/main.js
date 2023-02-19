@@ -1,7 +1,7 @@
 'use strict'
 
 const contentWeekday = document.querySelector('.content__top-weekday')
-const contentDate = document.querySelector('.content__top-text')
+const contentdateValue = document.querySelector('.content__top-text')
 const contentCity = document.querySelector('.content__top-city')
 
 const contentImages = document.querySelector('.content__bottom-img')
@@ -21,9 +21,6 @@ const infoImages = document.querySelectorAll('.info__box-img')
 const infoWeekday = document.querySelectorAll('.info__box-weekday')
 const infoTemp = document.querySelectorAll('.info__box-temp')
 
-// const url =
-// 'https://api.weatherapi.com/v1/current.json?key=e9a5d3b74bf84418b11193028231901&q=London'
-
 const getWeatherData = async (city) => {
   try {
     const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=77f461e07d8696ecbe2d0479346b20c9`
@@ -34,7 +31,7 @@ const getWeatherData = async (city) => {
   }
 }
 
-function date(date) {
+function date(dateValue) {
   const result = []
   const options = {
     year: 'numeric',
@@ -43,9 +40,9 @@ function date(date) {
     weekday: 'long',
   }
 
-  for (let i = 0; i <= date.length - 24; i += 8) {
+  for (let i = 0; i <= dateValue.length / 2; i += 8) {
     const value = new Date(
-      date[i].dt_txt
+      dateValue[i].dt_txt
         .slice(0, 10)
         .split('-')
         .map((el) => +el)
@@ -64,7 +61,7 @@ function weatherData(values) {
   const weatherDescrp = []
   const img = []
 
-  for (let i = 0; i <= values.length - 24; i += 8) {
+  for (let i = 0; i <= values.length / 2; i += 8) {
     data.push([
       Math.floor(values[i].clouds.all),
       Math.floor(values[i].main.humidity),
@@ -99,7 +96,7 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   const img = weatherData(weather.list)[3]
 
   contentWeekday.textContent = day[index][0]
-  contentDate.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
+  contentdateValue.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
   contentCity.textContent = cityName
 
   contentImages.src = `https://api.openweathermap.org/img/w/${img[index]}.png`
@@ -113,7 +110,7 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   for (let i = 0; i < infoTemp.length; i++) {
     infoTemp[i].textContent = temp[i] + ' °C'
     infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
-    infoImages[i].style.width = '65px'
+    infoImages[i].style.width = '60px'
     infoWeekday[i].textContent = day[i][0]
   }
 }
@@ -137,3 +134,18 @@ infoItem.forEach((item, index) => {
     app({ city: elem.slice(0, indexElem), index: index })
   })
 })
+
+//-----------
+const content = document.querySelector('.content')
+function replacedBackground(){
+  let num = 1
+  setInterval(() => {
+    content.style.backgroundImage = `url(../images/bg-images${num}.jpg)`
+    if (num > 4) {
+      num = 1
+    } else {
+      num++
+    }
+},8000)}
+
+replacedBackground()

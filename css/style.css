@@ -52,9 +52,11 @@ body {
 }
 
 .content {
-  background-image: url(../images/content-img.jpg);
-  /* background: linear-gradient(0deg, #000000, #000000), #000000; */
-  opacity: 0.9;
+  background-image: url(../images/bg-images1.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* opacity: 0.9; */
   width: 450px;
   height: 666px;
   border-radius: 30px;
@@ -62,6 +64,23 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all 1s;
+  position: relative;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgb(136, 235, 239, 0.4),rgb(83, 91, 230, 0.4));
+  border-radius: 30px;
+}
+
+.content__top,
+.content__bottom{
+  z-index: 10;
 }
 
 .content__top-weekday {
@@ -116,8 +135,6 @@ body {
   flex-direction: column;
   max-width: 500px;
   height: 600px;
-  /* background: linear-gradient(0deg, #000000, #000000), #000000; */
-  /* opacity: 0.8; */
   background: #222831;
   border-radius: 30px;
   padding: 50px;
@@ -209,7 +226,7 @@ body {
 
 .info__box-weekday {
   font-weight: 400;
-  margin: 15px 0;
+  margin: 5px 0;
 }
 
 .info__box-temp {
