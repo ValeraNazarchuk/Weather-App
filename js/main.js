@@ -145,7 +145,7 @@ infoItem.forEach((item, index) => {
   item.addEventListener('click', () => {
     const elem = contentCity.textContent
     const indexElem = elem.indexOf(',')
-    app({ city: elem.slice(0, indexElem), index: index })
+    app({ city: elem.slice(0, indexElem), index: index})
   })
 })
 
@@ -154,7 +154,7 @@ const content = document.querySelector('.content')
 function replacedBackground(){
   let num = 2
   setInterval(() => {
-    content.style.backgroundImage = `url(../images/bg-images${num}.jpg)`
+    content.style.backgroundImage = `url(/bg-images${num}.jpg)`
     if (num > 4) {
       num = 1
     } else {
