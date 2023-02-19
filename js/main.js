@@ -21,10 +21,10 @@ const infoImages = document.querySelectorAll('.info__box-img')
 const infoWeekday = document.querySelectorAll('.info__box-weekday')
 const infoTemp = document.querySelectorAll('.info__box-temp')
 
-const loader = document.querySelector('.loader')
-const container = document.querySelector('.container')
 
 window.addEventListener('load', () => {
+  const loader = document.querySelector('.loader')
+  const container = document.querySelector('.container')
   setTimeout(() => {
     loader.style.display = 'none'
     container.style.display = 'flex'
@@ -118,10 +118,10 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   wind.textContent = dataWeather[index][2] + ' m/sec'
 
   for (let i = 0; i < infoTemp.length; i++) {
-    infoTemp[i].textContent = temp[i] + ' °C'
     infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
-    infoImages[i].style.width = '60px'
-    infoWeekday[i].textContent = day[i][0]
+    // infoImages[i].style.width = '60px'
+    infoWeekday[i].textContent = day[i][0].slice(0,3)
+    infoTemp[i].textContent = temp[i] + ' °C'
   }
 }
 
@@ -145,10 +145,10 @@ infoItem.forEach((item, index) => {
   })
 })
 
-//-----------
+//-----------replaced Background-images---
 const content = document.querySelector('.content')
 function replacedBackground(){
-  let num = 1
+  let num = 2
   setInterval(() => {
     content.style.backgroundImage = `url(../images/bg-images${num}.jpg)`
     if (num > 4) {
