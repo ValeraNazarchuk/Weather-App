@@ -16,6 +16,7 @@ const precip = document.querySelector('.info-item-precip')
 const humidity = document.querySelector('.info-item-humidity')
 const wind = document.querySelector('.info-item-wind')
 
+const infoItem = document.querySelectorAll('.info__box-item')
 const infoImages = document.querySelectorAll('.info__box-img')
 const infoWeekday = document.querySelectorAll('.info__box-weekday')
 const infoTemp = document.querySelectorAll('.info__box-temp')
@@ -71,10 +72,6 @@ function cityCountry(city) {
 function data(value) {
   const result = []
   for (let i = 0; i <= value.length - 24; i += 8) {
-    // result.push(value[i].clouds.all)
-    // result.push(value[i].main.humidity)
-    // result.push(value[i].wind.speed)
-    // console.log(value[i].weather[0].main)
     result.push([
       Math.floor(value[i].clouds.all),
       Math.floor(value[i].main.humidity),
@@ -101,13 +98,16 @@ function images(img) {
 }
 
 // Default values
-const app = async (city = 'Kiev') => {
+const app = async ({city = 'Kiev', index = 0} = {}) => {
   const weather = await getWeatherData(city)
 
+  // Провірка на ошибку
   if (weather.message) {
-    // Провірка на ошибку
     console.log(weather.message)
+    formInput.setAttribute('placeholder', `${weather.message}`)
     return
+  } else {
+    formInput.setAttribute('placeholder', 'Search..')
   }
 
   const cityName = cityCountry(weather.city)
@@ -116,17 +116,17 @@ const app = async (city = 'Kiev') => {
   const day = date(weather.list)
   const dataWeather = data(weather.list)
 
-  contentWeekday.textContent = day[0][0]
-  contentDate.textContent = `${day[0][2]} ${day[0][1]} ${day[0][3]}`
-  contentCity.textContent = cityName[0]
+  contentWeekday.textContent = day[index][0]
+  contentDate.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
+  contentCity.textContent = cityName[index]
 
-  contentImages.src = `https://api.openweathermap.org/img/w/${img[0]}.png`
-  contentTemp.textContent = temp_Weather[0][0] + '°C'
-  contentWeather.textContent = temp_Weather[0][1]
+  contentImages.src = `https://api.openweathermap.org/img/w/${img[index]}.png`
+  contentTemp.textContent = temp_Weather[index][0] + '°C'
+  contentWeather.textContent = temp_Weather[index][1]
 
-  precip.textContent = dataWeather[0][0] + '%'
-  humidity.textContent = dataWeather[0][1] + '%'
-  wind.textContent = dataWeather[0][2] + ' m/sec'
+  precip.textContent = dataWeather[index][0] + '%'
+  humidity.textContent = dataWeather[index][1] + '%'
+  wind.textContent = dataWeather[index][2] + ' m/sec'
 
   for (let i = 0; i < infoTemp.length; i++) {
     infoTemp[i].textContent = temp_Weather[i][0] + ' °C'
@@ -142,8 +142,16 @@ form.addEventListener('submit', (e) => {
   e.preventDefault()
   if (!formInput.value) return
 
-  app(formInput.value)
-  
+  app({city: formInput.value})
+
   formInput.value = ''
   formInput.focus()
+})
+
+infoItem.forEach((item, index) => {
+  item.addEventListener('click' , (e) => {
+    const elem = contentCity.textContent
+    const indexElem = elem.indexOf(',')
+    app({city: elem.slice(0, indexElem),index: index})
+  })
 })
