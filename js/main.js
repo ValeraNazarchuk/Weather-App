@@ -21,6 +21,16 @@ const infoImages = document.querySelectorAll('.info__box-img')
 const infoWeekday = document.querySelectorAll('.info__box-weekday')
 const infoTemp = document.querySelectorAll('.info__box-temp')
 
+const loader = document.querySelector('.loader')
+const container = document.querySelector('.container')
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    loader.style.display = 'none'
+    container.style.display = 'flex'
+  },1000)
+})
+
 const getWeatherData = async (city) => {
   try {
     const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=77f461e07d8696ecbe2d0479346b20c9`
@@ -128,7 +138,7 @@ form.addEventListener('submit', (e) => {
 })
 
 infoItem.forEach((item, index) => {
-  item.addEventListener('click', (e) => {
+  item.addEventListener('click', () => {
     const elem = contentCity.textContent
     const indexElem = elem.indexOf(',')
     app({ city: elem.slice(0, indexElem), index: index })
