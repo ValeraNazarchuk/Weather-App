@@ -260,7 +260,6 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 20px 25px;
-  /* background-color: #272E37; */
   border: 3px solid #272E37;
   border-radius: 30px;
   transition: all .4s;
@@ -285,8 +284,9 @@ body {
   font-weight: 700;
 }
 
-/* ----------------------------- */
+/* -------------MEDIA---------------- */
 
+/* ----------1000px--------- */
 @media(max-width: 1000px) {
   .content {
     max-width: 400px;
@@ -301,6 +301,7 @@ body {
   }
 }
 
+/* --------------830px-------------- */
 @media(max-width: 830px) {
   .content {
     height: 566px;
@@ -372,6 +373,7 @@ body {
   }
 }
 
+/* ----------------680px------------ */
 @media(max-width: 680px) {
   .content {
     height: 506px;
@@ -384,6 +386,7 @@ body {
   }
 }
 
+/* -----------------590px------------- */
 @media(max-width: 590px) {
   .container {
     flex-direction: column;

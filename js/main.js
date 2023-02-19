@@ -21,7 +21,7 @@ const infoImages = document.querySelectorAll('.info__box-img')
 const infoWeekday = document.querySelectorAll('.info__box-weekday')
 const infoTemp = document.querySelectorAll('.info__box-temp')
 
-
+// event load
 window.addEventListener('load', () => {
   const loader = document.querySelector('.loader')
   const container = document.querySelector('.container')
@@ -31,6 +31,7 @@ window.addEventListener('load', () => {
   },1000)
 })
 
+// server request
 const getWeatherData = async (city) => {
   try {
     const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=77f461e07d8696ecbe2d0479346b20c9`
@@ -41,6 +42,7 @@ const getWeatherData = async (city) => {
   }
 }
 
+// function to get the date
 function date(dateValue) {
   const result = []
   const options = {
@@ -65,6 +67,7 @@ function date(dateValue) {
   return result
 }
 
+// I calculate the value
 function weatherData(values) {
   const data = []
   const tepm = []
@@ -88,18 +91,18 @@ function weatherData(values) {
 const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   const weather = await getWeatherData(city)
 
-  // Провірка на ошибку
+  // error checking
   if (weather.message) {
     console.log(weather.message)
     formInput.setAttribute('placeholder', `${weather.message}`)
-    return
     return
   } else {
     formInput.setAttribute('placeholder', 'Search..')
   }
 
+  // get value
   const cityName = weather.city.name + ', ' + weather.city.country
-  const day = date(weather.list) 
+  const day = date(weather.list)
   const dataWeather = weatherData(weather.list)[0]
   const temp = weatherData(weather.list)[1]
   const weatherDescrp = weatherData(weather.list)[2]
@@ -119,14 +122,14 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
 
   for (let i = 0; i < infoTemp.length; i++) {
     infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
-    // infoImages[i].style.width = '60px'
-    infoWeekday[i].textContent = day[i][0].slice(0,3)
+    infoWeekday[i].textContent = day[i][0].slice(0, 3)
     infoTemp[i].textContent = temp[i] + ' °C'
   }
 }
 
 app()
 
+// sending the name of the city
 form.addEventListener('submit', (e) => {
   e.preventDefault()
   if (!formInput.value) return
@@ -137,6 +140,7 @@ form.addEventListener('submit', (e) => {
   formInput.focus()
 })
 
+// element click event
 infoItem.forEach((item, index) => {
   item.addEventListener('click', () => {
     const elem = contentCity.textContent
@@ -145,7 +149,7 @@ infoItem.forEach((item, index) => {
   })
 })
 
-//-----------replaced Background-images---
+// replaced background-images
 const content = document.querySelector('.content')
 function replacedBackground(){
   let num = 2
