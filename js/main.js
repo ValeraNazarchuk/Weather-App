@@ -1,13 +1,14 @@
 'use strict'
 
+// -------CONTENT------
 const contentWeekday = document.querySelector('.content__top-weekday')
-const contentdateValue = document.querySelector('.content__top-text')
+const contentdate = document.querySelector('.content__top-text')
 const contentCity = document.querySelector('.content__top-city')
 
 const contentImages = document.querySelector('.content__bottom-img')
 const contentTemp = document.querySelector('.content__bottom-temp')
 const contentWeather = document.querySelector('.content__bottom-weather')
-//-------
+//  -------INFO--------
 const form = document.querySelector('.form')
 const formInput = document.querySelector('.form__input')
 const formBtn = document.querySelector('.form__button')
@@ -28,7 +29,7 @@ window.addEventListener('load', () => {
   setTimeout(() => {
     loader.style.display = 'none'
     container.style.display = 'flex'
-  },1000)
+  }, 1000)
 })
 
 // server request
@@ -43,7 +44,7 @@ const getWeatherData = async (city) => {
 }
 
 // function to get the date
-function date(dateValue) {
+function dates(date) {
   const result = []
   const options = {
     year: 'numeric',
@@ -52,9 +53,10 @@ function date(dateValue) {
     weekday: 'long',
   }
 
-  for (let i = 0; i <= dateValue.length / 2; i += 8) {
+
+  for (let i = 0; i <= date.length / 2; i += 8) {
     const value = new Date(
-      dateValue[i].dt_txt
+      date[i].dt_txt
         .slice(0, 10)
         .split('-')
         .map((el) => +el)
@@ -87,7 +89,7 @@ function weatherData(values) {
   return [data, tepm, weatherDescrp, img]
 }
 
-// Default values
+// Assignment of received data to elements
 const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   const weather = await getWeatherData(city)
 
@@ -100,26 +102,29 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
     formInput.setAttribute('placeholder', 'Search..')
   }
 
-  // get value
+  // get values
   const cityName = weather.city.name + ', ' + weather.city.country
-  const day = date(weather.list)
+  const day = dates(weather.list)
   const dataWeather = weatherData(weather.list)[0]
   const temp = weatherData(weather.list)[1]
   const weatherDescrp = weatherData(weather.list)[2]
   const img = weatherData(weather.list)[3]
 
+  // values for the block 'content'
   contentWeekday.textContent = day[index][0]
-  contentdateValue.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
+  contentdate.textContent = `${day[index][2]} ${day[index][1]} ${day[index][3]}`
   contentCity.textContent = cityName
 
   contentImages.src = `https://api.openweathermap.org/img/w/${img[index]}.png`
   contentTemp.textContent = temp[index] + '°C'
   contentWeather.textContent = weatherDescrp[index]
 
+  // values for the block 'info'
   precip.textContent = dataWeather[index][0] + '%'
   humidity.textContent = dataWeather[index][1] + '%'
   wind.textContent = dataWeather[index][2] + ' m/sec'
 
+  // through a loop, a value is set for each element of the 'info__box' list
   for (let i = 0; i < infoTemp.length; i++) {
     infoImages[i].src = `https://api.openweathermap.org/img/w/${img[i]}.png`
     infoWeekday[i].textContent = day[i][0].slice(0, 3)
@@ -127,6 +132,7 @@ const app = async ({ city = 'Kiev', index = 0 } = {}) => {
   }
 }
 
+// call to display default values
 app()
 
 // sending the name of the city
@@ -145,13 +151,13 @@ infoItem.forEach((item, index) => {
   item.addEventListener('click', () => {
     const elem = contentCity.textContent
     const indexElem = elem.indexOf(',')
-    app({ city: elem.slice(0, indexElem), index: index})
+    app({ city: elem.slice(0, indexElem), index: index })
   })
 })
 
-// replaced background-images
+// replacing background images
 const content = document.querySelector('.content')
-function replacedBackground(){
+function replacedBackground() {
   let num = 2
   setInterval(() => {
     content.style.backgroundImage = `url(./images/bg-images${num}.jpg)`
@@ -160,6 +166,7 @@ function replacedBackground(){
     } else {
       num++
     }
-},8000)}
+  }, 8000)
+}
 
 replacedBackground()
