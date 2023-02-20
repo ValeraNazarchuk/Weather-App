@@ -154,8 +154,9 @@ const content = document.querySelector('.content')
 function replacedBackground(){
   let num = 2
   setInterval(() => {
-    content.style.backgroundImage = `url(../images/bg-images${num}.jpg)`
-    if (num > 4) {
+    content.style.backgroundImage = `url(../images/bg-images2.jpg)`
+    if (num > 2) {
+      content.style.backgroundImage = `url(../images/bg-images1.jpg)`
       num = 1
     } else {
       num++
